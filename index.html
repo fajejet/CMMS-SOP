@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP Lengkap — CMMS Unit</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --border: #30363d;
+    --accent: #f0883e;
+    --accent2: #3fb950;
+    --accent3: #58a6ff;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --red: #f85149;
+    --purple: #bc8cff;
+
+    --role-lead: #1a3a5c;
+    --role-sa: #1e4d8c;
+    --role-adm: #1e7a5e;
+    --role-btp: #5c3d1a;
+    --role-gate: #c8410a;
+    --role-action: #2a2a2a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1a2332 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 56px;
+  }
+
+  .header-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .header-sep { color: var(--border); font-size: 20px; }
+
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-print {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-print:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .sidebar-section {
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 20px 4px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 20px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar-link:hover {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+  .sidebar-link.active {
+    color: var(--accent);
+    background: rgba(240,136,62,0.08);
+    border-left-color: var(--accent);
+  }
+
+  .sop-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .sidebar-link:hover .sop-badge,
+  .sidebar-link.active .sop-badge { color: var(--accent); border-color: var(--accent); }
+
+  .badge-new {
+    font-size: 9px;
+    background: rgba(240,136,62,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .badge-ref {
+    background: rgba(63,185,80,0.1);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* MAIN */
+  .main {
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2332 60%, #1e2d1e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(240,136,62,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: 200px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(63,185,80,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-unit {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-unit::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .hero-version {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .v-tag {
+    background: rgba(63,185,80,0.1);
+    border: 1px solid rgba(63,185,80,0.3);
+    color: var(--accent2);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 48px 64px;
+    max-width: 1100px;
+  }
+
+  /* OVERVIEW */
+  #overview {
+    margin-bottom: 64px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+    max-width: 720px;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+
+  .sop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .sop-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sop-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+  }
+
+  .sop-card:hover {
+    border-color: var(--accent);
+    background: rgba(240,136,62,0.04);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+
+  .sop-card:hover::before { transform: scaleY(1); }
+
+  .sop-card-id {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+
+  .sop-card-body {}
+
+  .sop-card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .sop-card-pic {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .sop-card .badge-new {
+    font-size: 8px;
+    padding: 1px 5px;
+    margin-left: 4px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .grid-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .grid-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* SOP SECTION */
+  .sop-section {
+    margin-bottom: 80px;
+    scroll-margin-top: 80px;
+  }
+
+  .sop-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sop-id-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .sop-section-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .sop-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .meta-pill {
+    font-size: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .sop-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    max-width: 680px;
+  }
+
+  /* SLA PILLS */
+  .sla-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .sla-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .sla-key { color: var(--text-muted); }
+  .sla-val { color: var(--accent2); font-weight: 600; font-family: 'Syne', sans-serif; font-size: 11px; }
+
+  /* DIAGRAM */
+  .diagram-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    overflow-x: auto;
+  }
+
+  .diagram-wrap .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    background: var(--surface2);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: rgba(240,136,62,0.03); }
+
+  td strong { color: var(--accent2); }
+
+  .td-cat {
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .sev-p0 { background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+  .sev-p1 { background: rgba(240,136,62,0.15); color: #f0883e; border: 1px solid rgba(240,136,62,0.3); }
+  .sev-p2 { background: rgba(210,153,34,0.15); color: #d2a521; border: 1px solid rgba(210,153,34,0.3); }
+  .sev-p3 { background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 64px 0;
+  }
+
+  /* BREADCRUMB */
+  .breadcrumb {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 16px 64px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { color: var(--border); margin: 0 8px; }
+
+  /* PRINT */
+  @media print {
+    .site-header, .sidebar, .breadcrumb, .btn-print { display: none !important; }
+    .layout { display: block; }
+    .content { padding: 24px; }
+    .hero { padding: 24px; }
+    body { background: white; color: #000; }
+    .diagram-wrap { background: #f5f5f5; border: 1px solid #ccc; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 24px; }
+    .hero { padding: 32px 24px; }
+    .hero h1 { font-size: 28px; }
+    .breadcrumb { padding: 12px 24px; }
+  }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Mermaid override for dark theme */
+  .mermaid svg {
+    background: transparent !important;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">CMMS Unit</div>
+  <div class="header-sep">›</div>
+  <div class="header-title">SOP Lengkap</div>
+  <div class="header-actions">
+    <button class="btn-print" onclick="window.print()">⎙ Print</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Ikhtisar</div>
+      <a href="#overview" class="sidebar-link"><span class="sop-badge">INDEX</span> Semua SOP</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Scrum & Delivery</div>
+      <a href="#sop-00" class="sidebar-link"><span class="sop-badge badge-new">SOP-00</span> Onboarding Anggota Baru</a>
+      <a href="#sop-01" class="sidebar-link"><span class="sop-badge">SOP-01</span> Intake & Backlog</a>
+      <a href="#sop-02" class="sidebar-link"><span class="sop-badge">SOP-02</span> Sprint Planning & Gate 1</a>
+      <a href="#sop-02b" class="sidebar-link"><span class="sop-badge badge-new">SOP-02b</span> Daily Standup</a>
+      <a href="#sop-03" class="sidebar-link"><span class="sop-badge">SOP-03</span> PRD & Acceptance Criteria</a>
+      <a href="#sop-04" class="sidebar-link"><span class="sop-badge">SOP-04</span> UX Design & Handoff</a>
+      <a href="#sop-05" class="sidebar-link"><span class="sop-badge">SOP-05</span> Technical Design (ADR)</a>
+      <a href="#sop-06" class="sidebar-link"><span class="sop-badge">SOP-06</span> Dev, Code Review & Gate 2</a>
+      <a href="#sop-07" class="sidebar-link"><span class="sop-badge">SOP-07</span> QA/UAT, Gate 3 & Deploy</a>
+      <a href="#sop-08" class="sidebar-link"><span class="sop-badge">SOP-08</span> Monitoring & Incident</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support & Maintenance</div>
+      <a href="#sop-09a" class="sidebar-link"><span class="sop-badge">SOP-09a</span> Penerimaan Tiket</a>
+      <a href="#sop-09b" class="sidebar-link"><span class="sop-badge">SOP-09b</span> Penanganan & Eskalasi</a>
+      <a href="#sop-10" class="sidebar-link"><span class="sop-badge">SOP-10</span> Maintenance Terjadwal</a>
+      <a href="#sop-11" class="sidebar-link"><span class="sop-badge">SOP-11</span> Komunikasi ke Klien</a>
+      <a href="#sop-12" class="sidebar-link"><span class="sop-badge">SOP-12</span> Laporan Berkala</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Referensi</div>
+      <a href="#severity" class="sidebar-link"><span class="sop-badge badge-ref">SEV</span> Severity Reference P0–P3</a>
+      <a href="#sla-table" class="sidebar-link"><span class="sop-badge badge-ref">SLA</span> SLA Master Table</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-unit">CMMS Unit</div>
+      <h1>SOP Lengkap</h1>
+      <div class="hero-version">
+        <span class="v-tag">v2.0</span>
+        Scrum + Support & Maintenance
+      </div>
+    </div>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <a href="#">CMMS Unit</a>
+      <span>›</span>
+      <a href="#">SOP Lengkap</a>
+      <span>›</span>
+      Index
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <section id="overview">
+        <div class="section-header">
+          <h2>SOP Lengkap — CMMS Unit</h2>
+        </div>
+        <p class="section-desc">
+          Referensi visual resmi seluruh prosedur kerja: dari onboarding, scrum delivery, hingga support &amp;
+          maintenance klien eksternal. Jika ada perbedaan antara dokumen narasi dan flowchart ini, flowchart
+          yang berlaku.
+        </p>
+
+        <div class="grid-label">Scrum & Delivery</div>
+        <div class="sop-grid">
+          <a href="#sop-00" class="sop-card">
+            <div class="sop-card-id">SOP-00 <span class="badge-new sop-badge">NEW</span></div>
+            <div class="sop-card-body">
+              <div class="sop-card-title">Onboarding Anggota Baru</div>
+              <div class="sop-card-pic">PIC: <strong>CMLEAD, SA, ADM</strong></div>
+            </div>
+          </a>
+          <a href="#sop-01" class="sop-card">
+            <div class="sop-card-id">SOP-01</div>
+            <div class="sop-card-body">
+              <div class="sop-card-title">Intake & Backlog Management</div>
+              <div class="sop-card-pic">PIC: <strong>CMP</strong></div>
+            </div>
+          </a>
+          <a href="#sop-02" class="sop-card">
+            <div class="sop-card-id">SOP-02</div>
+            <div class="sop-card-body">
+              <div class="sop-card-title">Sprint Planning & Gate 1</div>
+              <div class="sop-card-pic">PIC: <strong>CMLEAD, SA, CMP</strong></div>
+            </div>
+          </a>
+          <a href="#sop-02b" class="sop-card">
+            <div class="sop-card-id">SOP-02b <span class="badge-new sop-badge">NEW</span></div>
+            <div class="sop-card-body">
+              <div class="sop-card-title">Daily Standup</div>
+              <div class="sop-card-pic">PIC: <strong>SA (fasilitator)</strong></div>
+            </div>
+          </a>
+          <a href="#sop-03" class="sop-card">
+            <div class="sop-card-id">SOP-03</div>
+            <div class="sop-card-body">
+              <div class="sop-card-title">PRD & Acceptance Criteria</div>
+              <div class="sop-card-pic">PIC: <strong>CMP</strong></div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <p class="section-desc">✓ File published to GitHub Pages. Access at: <strong>https://fajejet.github.io/CMMS-SOP/</strong></p>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
